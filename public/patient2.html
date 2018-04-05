@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html ng-app='patientApp'>
+<head>
+  <title>Patient</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <style type="text/css">
+    .textarea{
+  /*border:1px solid black;*/
+  height: 550px;
+}
+.msgbox{
+  /*border:1px solid black;*/
+  height: 500px;
+  overflow-y: auto;
+}
+.inputbox{
+  /*border:1px solid black;*/
+  height: 50px;
+}
+
+img{
+  width: 30px;
+  height: 30px;
+
+}
+
+.them{
+  /*border:1px solid black;*/
+}
+  </style>
+</head>
+<body ng-controller='patientCtrl as patient'>
+
+  <div class="container">
+
+<center><h1>Patient's Area</h1></center>
+ <br><br><br>
+
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6 textarea">
+
+        <div class="row">
+          <div class="col-md-12 msgbox" id='scrollBottom'>
+
+            <!-- Patient Form -->
+            <div class="them row" ng-if='!patient.formFilled'>
+              <div class="col-md-1">
+                <img src="img/doctor.png" class="rounded float-left" alt="...">
+              </div>
+              <div class="col-md-10">
+                <div class="alert alert-primary" role="alert">
+                <form>
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">Name</label>
+                    <input type="text" class="form-control form-control-sm" ng-model='patient.patientData.name' placeholder="Enter name">
+                  </div>
+                  <div class="form-group">
+                    <label for="formGroupExampleInput2">Age</label>
+                    <input type="number" class="form-control form-control-sm" ng-model='patient.patientData.age' placeholder="Enter age">
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" ng-model='patient.patientData.fever'>
+                    <label class="form-check-label" for="defaultCheck1">
+                      Fever
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" ng-model='patient.patientData.nausea'>
+                    <label class="form-check-label" for="defaultCheck1">
+                      Nausea
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" ng-model='patient.patientData.cough'>
+                    <label class="form-check-label" for="defaultCheck1">
+                      Cough
+                    </label>
+                  </div>
+                  <br>
+                  <div class="form-group">
+                    <div class="col-md-10">
+                      <button ng-click='patient.makePatientData()' class="btn btn-primary">Respond</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              </div>
+            
+            </div>
+            <!-- End of Patient form -->
+
+            <!-- If form has been filled -->
+            <div ng-if='patient.formFilled'>
+
+              <!-- If doctor has not agree yet -->
+              <div class="them row" ng-if='!patient.doctorAgreed'>
+                <div class="col-md-12">
+                  <div class="alert alert-info" role="alert">
+                  <strong>Form filled! Waiting for doctor.</strong>
+                </div>
+                </div>
+              </div>
+
+              <!-- When doctor agrees -->
+              <div class="them row" ng-if='patient.doctorAgreed'>
+                <div class="col-md-12">
+                  <div class="alert alert-success" role="alert">
+                  <strong>Doctor has joined the chat.</strong>
+                </div>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="all-messages" ng-repeat='message in patient.messages'>
+                  
+                 <!-- `them` class shows the doctor's messages -->
+                  <div class="them row" ng-if='message.username=="Doctor"'>
+                    <div class="col-md-1"> 
+                      <img src="img/doctor.png" class="rounded float-left" alt="...">
+                    </div>
+                    <div class="col-md-10">
+                      <div class="alert alert-primary" role="alert">
+                      {{message.text}}
+                    </div>
+                    </div>
+                  </div>
+
+                  
+                  <!-- Patient message starts -->
+                  <div class="me row" ng-if='message.username=="Patient"'>
+                    <div class="col-md-10">
+                      <div class="alert alert-secondary" role="alert">
+                      {{message.text}}
+                    </div>
+                    </div>
+                    <div class="col-md-1">
+                      <img src="img/patient.png" class="rounded float-left" alt="...">
+                    </div>
+                  </div>
+                  <!-- Patient message ends -->
+
+            </div>
+
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 inputbox">
+            <div class="input-group mb-3">
+              <input type="text" ng-model='patient.newMessage' ng-disabled='!patient.doctorAgreed' class="form-control" placeholder="Enter message..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button ng-click='patient.sendMessage()' ng-disabled='!patient.doctorAgreed' class="btn btn-secondary" type="button">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+  </div>
+
+
+</body>
+
+<script src="js/angular.min.js"></script>
+<script src="js/socket.io.js"></script>
+<script type="text/javascript" src='js/patient-controller.js'></script>
+<script type="text/javascript">
+  var objDiv = document.getElementById("scrollBottom");
+  objDiv.scrollTop = objDiv.scrollHeight;
+</script>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang='en' ng-app='doctorApp'>
+<head>
+	<title>Doctor</title>
+	<style type="text/css">
+		.wrapper{
+			width: 300px;
+			height: 400px;
+			margin-left: 40%;
+			border:1px solid black;
+			padding:5px;
+		}
+		.msg-area{
+			height: 80%;
+			border-bottom:1px solid grey;
+		}
+		.input-area{
+			padding-top: 20px;
+			text-align: center;
+		}
+		li{
+			list-style-type: none;
+		}
+	</style>
+</head>
+<body ng-controller='doctorCtrl as doctor'>
+	<h1>This is doctor's area</h1>
+
+	<div class="wrapper">
+		<div class="msg-area">
+
+			<!-- Displaying the Patient's filled form values -->
+			<div class='doctorbot' ng-if='doctor.patientArrived'>
+				
+					<input type="text" placeholder='Name' name="name" ng-model='doctor.patientData.name' disabled><br>
+					<input type="number" placeholder='Age' name="age" ng-model='doctor.patientData.age' disabled><br>
+					<p>The patient has the following symptoms:</p>
+					<label><input type="checkbox" name="fever" ng-model='doctor.patientData.fever' disabled>Fever</label><br>
+					<label><input type="checkbox" name="nausea" ng-model='doctor.patientData.nausea' disabled>Nausea</label><br>
+					<label><input type="checkbox" name="cough" ng-model='doctor.patientData.cough' disabled>Cough</label><br>
+					<br>
+					<button ng-click='doctor.chatWithPatient()'>Chat with Patient</button>
+				
+			</div>
+
+			<div ng-if='!doctor.patientArrived'>
+				<strong>Waiting for patient...</strong>
+			</div>
+			<li ng-repeat='message in doctor.messages'><strong>{{message.username}}: </strong>{{message.text}}</li>
+		</div>
+		<div class="input-area">
+			<input type="text" ng-disabled='!doctor.chatOn' ng-model='doctor.newMessage'>
+			<button ng-click='doctor.sendMessage()'>Send</button>
+		</div>
+	</div>
+
+</body>
+<script src="js/angular.min.js"></script>
+<script src="js/socket.io.js"></script>
+<script type="text/javascript" src='js/doctor-controller.js'></script>
+</html>

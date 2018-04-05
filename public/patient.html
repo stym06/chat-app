@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang='en' ng-app='patientApp'>
+<head>
+	<title>Patient</title>
+	
+	<style type="text/css">
+		.wrapper{
+			width: 300px;
+			height: 400px;
+			margin-left: 40%;
+			border:1px solid black;
+			padding:5px;
+		}
+		.msg-area{
+			height: 80%;
+			border-bottom:1px solid grey;
+		}
+		.input-area{
+			padding-top: 20px;
+			text-align: center;
+		}
+		.doctorbot{
+			border:0.9px solid grey;
+			width: 70%;
+			padding:10px; 
+		}
+		li{
+			list-style-type: none;
+		}
+	</style>
+</head>
+<body ng-controller='patientCtrl as patient'>
+
+	<div class="wrapper">
+		<div class="msg-area">
+
+			<li ng-repeat='message in patient.messages'>
+				<strong>{{message.username}}</strong>: <span>{{message.text}}</span>
+			</li>
+
+			<div class='doctorbot' ng-if='!patient.formFilled'>
+				
+					<input type="text" placeholder='Name' name="name" ng-model='patient.patientData.name'><br>
+					<input type="number" placeholder='Age' name="age" ng-model='patient.patientData.age'><br>
+					<p>Check out the symptoms:</p>
+					<label><input type="checkbox" name="fever" ng-model='patient.patientData.fever'>Fever</label><br>
+					<label><input type="checkbox" name="nausea" ng-model='patient.patientData.nausea'>Nausea</label><br>
+					<label><input type="checkbox" name="cough" ng-model='patient.patientData.cough'>Cough</label><br>
+					<br>
+					<button ng-click='patient.makePatientData()'>Respond</button>
+				
+			</div>
+
+			<div ng-if='patient.formFilled'>
+				<p ng-if='!patient.doctorAgreed'><strong>Form filled! Waiting for doctor.</strong></p>
+				<p ng-if='patient.doctorAgreed'><strong>Doctor has joined the chat.</strong></p>
+			</div>
+
+			
+		</div>
+		<div class="input-area">
+			<input type="text" ng-model='patient.newMessage' ng-disabled='!patient.doctorAgreed'><button ng-click='patient.sendMessage()'>Send</button>
+		</div>
+	</div>
+
+</body>
+<script src="js/angular.min.js"></script>
+<script src="js/socket.io.js"></script>
+<script type="text/javascript" src='js/patient-controller.js'></script>
+</html>
