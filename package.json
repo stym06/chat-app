@@ -9,6 +9,9 @@
   },
   "author": "stym06",
   "license": "MIT",
+  "scripts": {
+    "build": "next build"
+  },
   "dependencies": {
     "express": "^4.16.3",
     "http": "0.0.0",
