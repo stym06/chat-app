@@ -1,4 +1,4 @@
-# INFORMATION ABOUT PROJECT
+## INFORMATION ABOUT PROJECT
 
 1. The project makes use of NodeJS, AngularJS, Socket.IO, and MySQL (knex.js for QueryBuilder).
 2. It assumes that Node is installed as well as npm (Node Package manager).
